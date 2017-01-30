@@ -53,7 +53,31 @@ router.patch('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
+  let deletedItem = {};
+  knex('classifieds')
+    .where('id', req.params.id)
+    .then(itemToDelete => {
+      if (!itemToDelete) {
+        return next();
+      }
 
+      deletedItem = itemToDelete[0];
+
+      knex('classifieds')
+        .del()
+        .where('id', req.params.id)
+        .then(() => {
+          delete deletedItem.created_at;
+          delete deletedItem.updated_at;
+          res.send(deletedItem);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+    .catch(err => {
+      console.log(err);
+    })
 });
 
 module.exports = router;
