@@ -11,19 +11,19 @@ router.get('/:id?', (req, res, next) => {
     knex.select('id', 'title', 'description', 'price', 'item_image')
       .from('classifieds')
       .where('id', req.params.id)
-      .then((result) => {
+      .then(result => {
         res.send(result[0]);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       })
   } else {
     knex.select('id', 'title', 'description', 'price', 'item_image')
     .from('classifieds')
-    .then((results)=> {
+    .then(results => {
       res.send(results);
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
     })
   }
@@ -32,16 +32,24 @@ router.get('/:id?', (req, res, next) => {
 router.post('/', (req, res, next) => {
   knex('classifieds')
     .insert(req.body, ['id', 'title', 'description', 'price', 'item_image'])
-    .then((result) => {
-      res.send(result[0])
+    .then(postedItem => {
+      res.send(postedItem[0])
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
     });
 });
 
 router.patch('/:id', (req, res, next) => {
-
+  knex('classifieds')
+    .update(req.body, ['id', 'title', 'description', 'price', 'item_image'])
+    .where('id', req.params.id)
+    .then(updatedItem => {
+      res.send(updatedItem[0]);
+    })
+    .catch(err => {
+      console.log(err);
+    })
 });
 
 router.delete('/:id', (req, res, next) => {
