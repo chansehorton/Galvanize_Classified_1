@@ -4,6 +4,10 @@ const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const messages = require('./routes/classifieds');
 
 app.use(bodyParser.json());
